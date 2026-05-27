@@ -21,8 +21,7 @@ docker compose run --rm worker console_capture.request srv-mock-01   # !bmc 입�
 docker compose --profile slack up -d slackbot       # 토큰 설정 후 실제 Slack 봇 기동
 ```
 
-자세한 사용/구조는 [console-capture/README.md](console-capture/README.md), 벤더·펌웨어·운영 노하우는
-[console-capture/docs/OPERATIONS.md](console-capture/docs/OPERATIONS.md).
+자세한 사용방법 console-capture/README.md 참고.
 
 ## 공통 원칙
 - 설정은 환경변수 + 로컬 인벤토리/시크릿 파일로 주입. 실 연동(CMDB/Vault)은 인터페이스 구현체만 교체.
