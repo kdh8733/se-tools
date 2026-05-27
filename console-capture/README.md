@@ -1,10 +1,8 @@
-# console_capture — BMC/VM 콘솔 스크린샷 → Message Queue → Slack (MVP)
+# BMC Console Capture
 
-Slack에서 `!bmc <SERIAL|HOSTNAME>`(또는 `/bmc ...`)을 입력하면 → **CMDB에서 벤더·IPMI IP 조회** →
-**벤더별 로그인/캡처 분기** → **PNG를 base64로 인코딩해 Message Queue로 전달** → **Slack 봇이 파일을
-write 후 같은 스레드에 업로드**하는 파이프라인의 동작 모델. 설정 일부만 바꾸면 어느 환경에서도 돌아가도록 설계했다.
+시스템 Shutdown 혹은 통신 불능 상태에서 BMC에 접속 & 콘솔 확인하는 절차를 간소화하기 위한 툴.
 
-> 운영/벤더/펌웨어 노하우는 [`docs/OPERATIONS.md`](docs/OPERATIONS.md) 참고.
+> 운영/벤더/펌웨어 특성 이슈는 [`docs/OPERATIONS.md`](docs/OPERATIONS.md) 참고.
 
 ## 예시 출력
 
