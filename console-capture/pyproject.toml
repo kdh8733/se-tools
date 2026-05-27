@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "console-capture"
+version = "0.1.0"
+description = "se-tools: BMC/VM console screenshot -> Message Queue -> Slack bot upload"
+requires-python = ">=3.10"
+dependencies = [
+    "redis>=5",
+    "requests>=2.31",
+    "slack_sdk>=3.27",
+    "slack_bolt>=1.18",
+    "pillow>=10",
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+cc-slackbot = "console_capture.slackbot:main"
+cc-request = "console_capture.request:main"
+cc-worker = "console_capture.worker:main"
+cc-consumer = "console_capture.consumer:main"
+cc-producer = "console_capture.producer:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

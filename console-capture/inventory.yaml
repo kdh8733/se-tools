@@ -1,0 +1,24 @@
+# 로컬 더미 인벤토리 (MVP 데모용).
+# 실 CMDB 연동 시 cmdb.LocalInventoryCmdb를 같은 인터페이스(CmdbResolver) API 구현체로 교체(README 참고).
+# IP는 RFC5737 TEST-NET-1(192.0.2.0/24), serial/hostname은 모두 가짜.
+servers:
+  - hostname: srv-mock-01
+    serial: MOCK-0001
+    vendor: mock
+    ipmi_ip: 192.0.2.10
+  - hostname: srv-dell-01
+    serial: DELLSN0001
+    vendor: dell
+    ipmi_ip: 192.0.2.20
+  - hostname: srv-lenovo-01
+    serial: LNVOSN0001
+    vendor: lenovo
+    ipmi_ip: 192.0.2.30
+  - hostname: srv-hpe-01
+    serial: HPESN0001
+    vendor: hpe
+    ipmi_ip: 192.0.2.40
+  - hostname: srv-smc-01
+    serial: SMCSN0001
+    vendor: supermicro
+    ipmi_ip: 192.0.2.50

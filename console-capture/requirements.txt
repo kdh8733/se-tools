@@ -1,0 +1,7 @@
+redis>=5
+requests>=2.31
+slack_sdk>=3.27
+slack_bolt>=1.18
+pillow>=10
+pyyaml>=6
+pytest>=7

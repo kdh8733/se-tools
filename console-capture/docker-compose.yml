@@ -1,0 +1,68 @@
+# console-capture - 로컬/Docker Desktop 기동용. k8s 배포 시 동일 이미지 + command로 Deployment 분리.
+name: console-capture
+
+services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # 요청 큐 소비 -> CMDB/secret resolve -> 벤더 캡처 -> 결과 큐 발행
+  worker:
+    build: .
+    image: se-tools/console-capture:latest
+    command: ["console_capture.worker"]
+    environment:
+      CC_REDIS_URL: redis://redis:6379/0
+      CC_TLS_VERIFY: "false"
+      # 실 자격증명: secrets.yaml 마운트 후 CC_SECRETS 지정(또는 Vault 구현체로 교체)
+      CC_SECRETS: ${CC_SECRETS:-}
+    volumes:
+      - ./inventory.yaml:/app/inventory.yaml:ro
+      # - ./secrets.yaml:/app/secrets.yaml:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # 결과 큐 소비 -> PNG write -> Slack 업로드(토큰 없으면 /data/uploads 로컬 sink)
+  consumer:
+    image: se-tools/console-capture:latest
+    command: ["console_capture.consumer"]
+    environment:
+      CC_REDIS_URL: redis://redis:6379/0
+      CC_CAPTURE_DIR: /data/captures
+      CC_UPLOAD_DIR: /data/uploads
+      SLACK_BOT_TOKEN: ${SLACK_BOT_TOKEN:-}
+      SLACK_CHANNEL: ${SLACK_CHANNEL:-}
+    volumes:
+      - ./out:/data
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Slack 입력 봇(!bmc / /bmc). 토큰 필요 -> `docker compose --profile slack up`
+  slackbot:
+    image: se-tools/console-capture:latest
+    command: ["console_capture.slackbot"]
+    profiles: ["slack"]
+    environment:
+      CC_REDIS_URL: redis://redis:6379/0
+      SLACK_BOT_TOKEN: ${SLACK_BOT_TOKEN:-}
+      SLACK_APP_TOKEN: ${SLACK_APP_TOKEN:-}
+      SLACK_CHANNEL: ${SLACK_CHANNEL:-}
+      CC_ALLOWED_CHANNELS: ${CC_ALLOWED_CHANNELS:-}
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  redis-data:
