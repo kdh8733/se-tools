@@ -4,9 +4,9 @@ Systems / Infra Engineering 툴 모음. 각 툴은 독립 디렉토리로 구성
 
 ## Tools
 
-| 툴 | 설명 | 상태 |
+| Name | Description | Status |
 |---|---|---|
-| [console-capture](console-capture/) | 서버 BMC/VM 콘솔 스크린샷을 Slack `!bmc`/`/bmc`로 캡처 → Message Queue → Slack 업로드 | MVP |
+| console-capture | Slack bot 호출 기반으로 서버 BMC / VM 콘솔 스크린샷을 캡쳐 & Slack Upload | MVP |
 
 > 추가 툴은 같은 패턴(자체 `pyproject.toml` + `Dockerfile` + `docker-compose.yml`)으로 디렉토리를 늘린다.
 
