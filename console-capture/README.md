@@ -6,6 +6,13 @@ write 후 같은 스레드에 업로드**하는 파이프라인의 동작 모델
 
 > 운영/벤더/펌웨어 노하우는 [`docs/OPERATIONS.md`](docs/OPERATIONS.md) 참고.
 
+## 예시 출력
+
+`!bmc srv-mock-01` 입력 시 봇이 스레드에 업로드하는 콘솔 PNG 예시. mock 시뮬레이터가 생성한 합성 화면이며,
+실제 BMC/VM 캡처도 동일한 파이프라인으로 같은 형식의 PNG를 전달한다.
+
+![console-capture mock 예시](docs/examples/sample-mock-console.png)
+
 ## 아키텍처 (3-stage, 2-queue)
 
 ```
