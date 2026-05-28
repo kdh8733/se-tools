@@ -12,7 +12,7 @@ import uuid
 
 from console_capture import pipeline
 from console_capture.adapters import get_adapter, known_vendors, normalize_vendor
-from console_capture.adapters.base import NotImplementedInMVP
+from console_capture.adapters.base import VendorCaptureNotSupported
 from console_capture.config import Config, load_env_file
 from console_capture.mq import RedisMQ
 
@@ -54,8 +54,8 @@ def main(argv=None) -> int:
         result, msg = pipeline.capture_to_message(
             vendor, args.host, args.username, args.password, name=args.name,
             request_id=rid, max_inline_bytes=cfg.max_inline_bytes, tls_verify=cfg.tls_verify)
-    except NotImplementedInMVP as e:
-        print(f"[mgr] {vendor} capture not in MVP: {e}", file=sys.stderr)
+    except VendorCaptureNotSupported as e:
+        print(f"[mgr] {vendor} capture not supported: {e}", file=sys.stderr)
         return 3
 
     print(f"[mgr] captured {result.width}x{result.height} {result.byte_size}B "

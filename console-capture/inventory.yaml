@@ -1,4 +1,4 @@
-# 로컬 더미 인벤토리 (MVP 데모용).
+# 로컬 더미 인벤토리 (데모용).
 # 실 CMDB 연동 시 cmdb.LocalInventoryCmdb를 같은 인터페이스(CmdbResolver) API 구현체로 교체(README 참고).
 # IP는 RFC5737 TEST-NET-1(192.0.2.0/24), serial/hostname은 모두 가짜.
 servers:

@@ -1,13 +1,13 @@
 """HPE iLO 어댑터 - Redfish 세션 + capability probe까지 실코드.
 
-live capture(/wss/ircport StateMachine 49-state 디코더)는 MVP 범위 밖이라 capture()는 명시적으로 막는다.
-probe로 GraphicalConsole/KVMIP 활성 여부를 확인하는 것까지가 MVP 책임."""
+live capture(/wss/ircport StateMachine 49-state 디코더)는 별도 백엔드 영역이라 capture()는 명시적으로 막는다.
+probe로 GraphicalConsole/KVMIP 활성 여부를 확인하는 것까지가 이 어댑터의 책임."""
 from __future__ import annotations
 
 import requests
 import urllib3
 
-from console_capture.adapters.base import NotImplementedInMVP, ProbeResult
+from console_capture.adapters.base import ProbeResult, VendorCaptureNotSupported
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -31,13 +31,13 @@ class HpeAdapter:
             return ProbeResult(
                 self.vendor, True,
                 f"iLO GraphicalConsole.ServiceEnabled={enabled}, KVMIP={kvmip}; "
-                f"live framebuffer decode는 프로덕션 백엔드(MVP 미포함)",
+                f"live framebuffer decode는 별도 live-frame 백엔드 영역(이 어댑터 미포함)",
                 enabled and kvmip,
             )
         except Exception as e:
             return ProbeResult(self.vendor, False, f"{type(e).__name__}: {e}", False)
 
     def capture(self, host, username, password, *, tls_verify=False, hostname=""):
-        raise NotImplementedInMVP(
+        raise VendorCaptureNotSupported(
             "HPE iLO live capture는 /wss/ircport StateMachine(49-state) + ColorCache 디코더가 필요해 "
-            "MVP 범위 밖이다. probe로 capability만 확인하고, 실 캡처는 프로덕션 ilo live-frame 백엔드에서 처리.")
+            "이 어댑터의 범위 밖이다. probe로 capability만 확인하고, 실 캡처는 별도 ilo live-frame 백엔드에서 처리.")

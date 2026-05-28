@@ -25,14 +25,14 @@
 
 - BMC 자격증명 = **하드웨어 풀권한**(전원·가상미디어·KVM). 평문 노출은 치명적이다.
 - **ID/PW를 CMDB·코드·환경변수 평문·로그에 두지 마라.** 캡처 실패 로그/스택트레이스에 password가 새지 않도록 redaction.
-- MVP: `secrets.yaml`(gitignore). **운영: Vault / AWS Secrets Manager**로 `SecretResolver` 구현체 교체.
+- 기본 구성: `secrets.yaml`(gitignore). **운영: Vault / AWS Secrets Manager**로 `SecretResolver` 구현체 교체.
 - 최소권한 계정(가능하면 screenshot/read 전용), BMC별 분리 자격증명.
 - **콘솔 픽셀 자체가 secret을 담을 수 있다** — BIOS 패스워드 입력 화면, OS 로그인, 복호화된 데이터. 캡처 이미지가 MQ/Slack/저장소에 잔류하므로 **retention·채널 ACL·접근 감사**를 설계하라. (PCI-DSS/ISO 27001 환경이면 필수)
 
 ## 4. 네트워크 분리
 
 - BMC는 **OOB 관리망**(인터넷·사내망 비라우팅)에 두는 게 일반적. Slack은 인터넷.
-- **worker를 OOB망 안에 두고 broker로 아웃바운드 연결만** 맺어라(인바운드 0). 이 MVP의 2-큐 구조가 그 분리를 그대로 지원한다.
+- **worker를 OOB망 안에 두고 broker로 아웃바운드 연결만** 맺어라(인바운드 0). 이 툴의 2-큐 구조가 그 분리를 그대로 지원한다.
 - BMC는 self-signed 인증서가 흔하다 → `CC_TLS_VERIFY=false`가 기본. 운영에선 내부 CA로 검증 켜기 권장.
 
 ## 5. 세션 경합 & BMC 부하
@@ -58,7 +58,7 @@
 | `inline_payload_too_large` | 화면이 시각적으로 커서 base64 한도 초과 | object store(presigned URL) 경로로 전환 검토 |
 | `cmdb_lookup_failed` | 인벤토리 미스/시리얼·호스트네임 오타 | 인벤토리/CMDB 레코드 확인 |
 | `vendor_unknown` | CMDB의 vendor 값이 alias 맵에 없음 | `adapters/__init__.py` alias 추가 |
-| `vendor_unsupported` | MVP 미구현 벤더(HPE live/Supermicro/VMware) | 해당 벤더 백엔드 구현 |
+| `vendor_unsupported` | 미지원 벤더(HPE live/Supermicro/VMware) | 해당 벤더 백엔드 구현 |
 | `capture_failed` | 네트워크/인증/디코드 오류 | 메시지의 예외 내용 확인, BMC 도달성·자격증명 점검 |
 
 ## 8. 새 벤더 추가 (확장)

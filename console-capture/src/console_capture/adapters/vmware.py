@@ -6,7 +6,7 @@
 둘 다 BMC가 아니라 hypervisor가 VM 콘솔 프레임버퍼를 캡처한다(게스트 내부 에이전트 불필요)."""
 from __future__ import annotations
 
-from console_capture.adapters.base import NotImplementedInMVP, ProbeResult
+from console_capture.adapters.base import ProbeResult, VendorCaptureNotSupported
 
 
 class VmwareAdapter:
@@ -20,6 +20,6 @@ class VmwareAdapter:
         )
 
     def capture(self, host, username, password, *, tls_verify=False, hostname=""):
-        raise NotImplementedInMVP(
+        raise VendorCaptureNotSupported(
             "VMware ESXi VM 콘솔 캡처는 vim25 SOAP(CreateScreenshot_Task->datastore) 또는 "
-            "/screen?id={moid} 경로. MVP에서는 라이선스 이슈로 구성만 잡아둠.")
+            "/screen?id={moid} 경로. 라이선스 환경 부재로 구현 보류 — 구성만 잡아둠.")

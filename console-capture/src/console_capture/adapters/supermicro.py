@@ -8,7 +8,7 @@ from __future__ import annotations
 import requests
 import urllib3
 
-from console_capture.adapters.base import NotImplementedInMVP, ProbeResult
+from console_capture.adapters.base import ProbeResult, VendorCaptureNotSupported
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -29,6 +29,6 @@ class SupermicroAdapter:
             return ProbeResult(self.vendor, False, f"{type(e).__name__}: {e}", False)
 
     def capture(self, host, username, password, *, tls_verify=False, hostname=""):
-        raise NotImplementedInMVP(
+        raise VendorCaptureNotSupported(
             "Supermicro 스크린샷 캡처 경로를 공식 문서로 확인하지 못했다. 실 하드웨어에서 "
             "IPMI raw / web CGI / Redfish OEM 중 PNG를 주는 경로를 검증한 뒤 구현할 것.")

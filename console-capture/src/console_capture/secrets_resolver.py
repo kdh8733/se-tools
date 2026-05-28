@@ -1,7 +1,7 @@
 """Secret resolver - (vendor, ipmi_ip) -> 로그인 자격증명.
 
 CMDB는 IP/vendor만 준다. 자격증명은 절대 CMDB나 코드에 두지 말고 여기서 분리 조회한다.
-MVP는 로컬 YAML(LocalSecretResolver). 운영에서는 Vault/AWS Secrets Manager 구현체로 교체(OPERATIONS.md)."""
+기본 구현은 로컬 YAML(LocalSecretResolver). 운영에서는 Vault/AWS Secrets Manager 구현체로 교체(OPERATIONS.md)."""
 from __future__ import annotations
 
 import os

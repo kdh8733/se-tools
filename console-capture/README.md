@@ -95,7 +95,7 @@ python -m console_capture.consumer --once         # PNG write + uploads\srv-mock
 python -m pytest -q
 ```
 
-## MVP가 의도적으로 안 다루는 것 (정직)
+## 현재 지원하지 않는 것 (정직)
 - HPE live 디코더 / Supermicro 캡처 / VMware 실 캡처는 미구현(probe·스캐폴딩). 호출 시 `vendor_unsupported`로 명시 실패.
 - 보안 거버넌스(콘솔 픽셀 secret, 토픽 ACL/retention)는 운영 전개 전 별도 설계 — OPERATIONS.md 3장.
 - 로컬 브로커는 Redis Streams. 프로덕션은 Kafka 스왑(`mq.py` 인터페이스 유지).

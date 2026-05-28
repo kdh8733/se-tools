@@ -1,6 +1,6 @@
 """CMDB resolver - serial/hostname -> (vendor, ipmi_ip).
 
-MVP는 로컬 YAML 인벤토리(LocalInventoryCmdb). 실 CMDB는 동일 인터페이스(CmdbResolver)를 따르는
+기본 구현은 로컬 YAML 인벤토리(LocalInventoryCmdb). 실 CMDB는 동일 인터페이스(CmdbResolver)를 따르는
 API 구현체로 교체하면 된다(README 'CMDB 연동' 참고). 자격증명은 여기서 다루지 않는다 - SecretResolver 담당."""
 from __future__ import annotations
 

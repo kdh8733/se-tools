@@ -14,8 +14,8 @@ class ProbeResult:
     can_capture: bool
 
 
-class NotImplementedInMVP(RuntimeError):
-    """실 캡처 경로가 MVP 범위 밖(디코더/라이선스/미검증 API)일 때."""
+class VendorCaptureNotSupported(RuntimeError):
+    """벤더의 실 캡처 경로가 이 구현에서 미지원(디코더/라이선스/미검증 API)."""
 
 
 @runtime_checkable
