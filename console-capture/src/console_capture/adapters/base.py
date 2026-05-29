@@ -14,8 +14,8 @@ class ProbeResult:
     can_capture: bool
 
 
-class VendorCaptureNotSupported(RuntimeError):
-    """벤더의 실 캡처 경로가 이 구현에서 미지원(디코더/라이선스/미검증 API)."""
+class VendorAdapterPending(RuntimeError):
+    """벤더 어댑터가 아직 추가되지 않은 상태(실 환경에서 검증 후 단계적으로 추가)."""
 
 
 @runtime_checkable

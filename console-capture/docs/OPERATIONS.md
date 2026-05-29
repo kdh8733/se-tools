@@ -10,7 +10,7 @@
 | **Dell iDRAC** | fw≥7: Redfish OEM `ExportServerScreenShot` / fw<7: RFB/WebSocket | ★★☆ | **펌웨어로 경로가 갈린다** |
 | **VMware ESXi** | hypervisor가 VM 콘솔 PNG 직접(`CreateScreenshot`/`/screen?id=`) | ★★☆ | BMC 아님. 게스트 에이전트 불필요 |
 | **HPE iLO** | 공개 와이어 스펙 없음 → BMC가 서빙하는 JS 디코더 포팅 | ★★★ 가장 어려움 | 펌웨어 업데이트에 취약 |
-| **Supermicro** | 스크린샷 전용 API **미확인** | ? | 실HW에서 IPMI/CGI/Redfish OEM 검증 필요 |
+| **Supermicro** | 스크린샷 전용 API는 **실HW 검증 후 결정** | ? | IPMI/CGI/Redfish OEM 중 이미지 제공 경로 식별 후 추가 |
 
 요점: **Lenovo는 벤더가 API를 제공**해서 쉽고, **HPE는 공개 스펙이 없어** reverse-engineering이 필요하다.
 
@@ -58,7 +58,7 @@
 | `inline_payload_too_large` | 화면이 시각적으로 커서 base64 한도 초과 | object store(presigned URL) 경로로 전환 검토 |
 | `cmdb_lookup_failed` | 인벤토리 미스/시리얼·호스트네임 오타 | 인벤토리/CMDB 레코드 확인 |
 | `vendor_unknown` | CMDB의 vendor 값이 alias 맵에 없음 | `adapters/__init__.py` alias 추가 |
-| `vendor_unsupported` | 미지원 벤더(HPE live/Supermicro/VMware) | 해당 벤더 백엔드 구현 |
+| `vendor_adapter_pending` | 어댑터 추가 예정 벤더(HPE live/Supermicro/VMware) | 해당 벤더 어댑터 구현 |
 | `capture_failed` | 네트워크/인증/디코드 오류 | 메시지의 예외 내용 확인, BMC 도달성·자격증명 점검 |
 
 ## 8. 새 벤더 추가 (확장)

@@ -25,7 +25,7 @@ Slack !bmc / /bmc  ─publish─►  bmc_screen_request ─►  worker          
 
 - **즉시 ack + 비동기**: 봇은 입력 즉시 "🔍 캡처 중"을 답하고, 결과는 worker→consumer를 거쳐 스레드에 올라온다.
 - **네트워크 분리**: worker를 BMC OOB망 안에 두고 broker로 아웃바운드만 — Slack(인터넷)과 BMC망이 직접 닿지 않는다.
-- 모든 실패(CMDB 미스/벤더 미지원/캡처 오류)는 `status=error`로 발행돼 스레드에 사람이 읽을 메시지로 표시된다.
+- 모든 실패(CMDB·자격증명·캡처 오류 등)는 `status=error`로 발행돼 스레드에 사람이 읽을 메시지로 표시된다.
 
 ### 컴포넌트
 
@@ -36,7 +36,7 @@ Slack !bmc / /bmc  ─publish─►  bmc_screen_request ─►  worker          
 | `worker.py` | 요청 소비 → CMDB·Secret resolve → 벤더 캡처 → 결과 발행 |
 | `consumer.py` | 결과 소비 → PNG write → Slack 업로드(또는 로컬 sink) |
 | `cmdb.py` / `secrets_resolver.py` | CMDB/Secret 추상화 + 로컬 구현체 |
-| `adapters/*.py` | 벤더별 로그인·캡처 (dell/lenovo 실코드, hpe/supermicro/vmware stub) |
+| `adapters/*.py` | 벤더별 로그인·캡처 (dell/lenovo 실코드, hpe/supermicro/vmware는 검증 후 단계적 추가) |
 | `producer.py` | (저수준) CMDB 없이 `-V vendor -H ip` 직접 캡처 — 어댑터 단위 테스트용 |
 
 ## 벤더 매트릭스
@@ -46,9 +46,9 @@ Slack !bmc / /bmc  ─publish─►  bmc_screen_request ─►  worker          
 | `mock` | ✅ 완전 동작 | 합성 PNG (로컬 데모 엔진) |
 | `dell`/`idrac` | ✅ 실코드 | Redfish OEM `ExportServerScreenShot` (fw≥7) |
 | `lenovo`/`xcc` | ✅ 실코드 | `rp_screenshot` → PNG download (디코더 0) |
-| `hpe`/`ilo` | ⚠️ probe만 | Redfish capability 확인 (live 디코더는 프로덕션) |
-| `supermicro` | ⚠️ probe만 | Redfish 도달성 (스크린샷 API 미확인) |
-| `vmware`/`esxi` | 🟡 스캐폴딩 | vim25 `CreateScreenshot`/`/screen?id=` (라이선스로 구성만) |
+| `hpe`/`ilo` | ⚠️ probe만 | Redfish capability 확인 (live 디코더는 추후 추가 예정) |
+| `supermicro` | ⚠️ probe만 | Redfish 도달성 (스크린샷 API는 실HW 검증 후 추가) |
+| `vmware`/`esxi` | 🟡 스캐폴딩 | vim25 `CreateScreenshot`/`/screen?id=` (라이선스 환경 확보 후 구현) |
 
 ## 빠른 시작 — 토큰 없이 (어느 환경이든)
 
@@ -95,7 +95,7 @@ python -m console_capture.consumer --once         # PNG write + uploads\srv-mock
 python -m pytest -q
 ```
 
-## 현재 지원하지 않는 것 (정직)
-- HPE live 디코더 / Supermicro 캡처 / VMware 실 캡처는 미구현(probe·스캐폴딩). 호출 시 `vendor_unsupported`로 명시 실패.
+## 다음 확장 단계
+- HPE live 디코더 / Supermicro 캡처 / VMware 실 캡처는 실 환경에서 검증한 뒤 단계적으로 추가 예정(현재는 probe·스캐폴딩). 호출 시 `vendor_adapter_pending`으로 명시 실패.
 - 보안 거버넌스(콘솔 픽셀 secret, 토픽 ACL/retention)는 운영 전개 전 별도 설계 — OPERATIONS.md 3장.
 - 로컬 브로커는 Redis Streams. 프로덕션은 Kafka 스왑(`mq.py` 인터페이스 유지).

@@ -8,7 +8,7 @@ import sys
 
 from console_capture import pipeline
 from console_capture.adapters import normalize_vendor
-from console_capture.adapters.base import VendorCaptureNotSupported
+from console_capture.adapters.base import VendorAdapterPending
 from console_capture.cmdb import CmdbError, LocalInventoryCmdb
 from console_capture.config import Config, load_env_file
 from console_capture.models import build_error_message
@@ -48,8 +48,8 @@ def process(req: dict, cfg: Config, cmdb, secrets) -> dict:
             tls_verify=cfg.tls_verify, reply=reply,
         )
         return msg
-    except VendorCaptureNotSupported as e:
-        return build_error_message(rid, reply, "vendor_unsupported", str(e), query=query, target=target)
+    except VendorAdapterPending as e:
+        return build_error_message(rid, reply, "vendor_adapter_pending", str(e), query=query, target=target)
     except Exception as e:  # 네트워크/인증/디코드 등 캡처 실패
         return build_error_message(rid, reply, "capture_failed", f"{type(e).__name__}: {e}",
                                    query=query, target=target)

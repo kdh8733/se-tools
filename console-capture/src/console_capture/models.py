@@ -93,7 +93,7 @@ def build_capture_request(query: str, reply: dict, source: str, request_id: str 
 
 def build_error_message(request_id: str, reply: dict, code: str, message: str,
                         query: str | None = None, target: dict | None = None) -> dict:
-    """캡처 실패(CMDB 미스/벤더 미지원/캡처 오류)를 결과 큐로. consumer가 스레드에 사람이 읽을 메시지로."""
+    """캡처 실패(CMDB·자격증명·캡처 오류 등)를 결과 큐로. consumer가 스레드에 사람이 읽을 메시지로."""
     return {
         "type": "bmc_screen_result",
         "request_id": request_id,

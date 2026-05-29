@@ -2,7 +2,7 @@ import base64
 
 from console_capture import pngutil
 from console_capture.adapters import get_adapter, known_vendors, normalize_vendor
-from console_capture.adapters.base import VendorCaptureNotSupported
+from console_capture.adapters.base import VendorAdapterPending
 from console_capture.adapters.mock import MockAdapter
 from console_capture.models import build_result_message
 
@@ -54,12 +54,12 @@ def test_all_adapters_have_interface():
         assert hasattr(a, "probe") and hasattr(a, "capture")
 
 
-def test_stub_adapters_raise():
+def test_pending_adapters_raise():
     for v in ("hpe", "supermicro", "vmware"):
         try:
             get_adapter(v).capture("1.2.3.4", "u", "p")
-            assert False, f"{v} should raise VendorCaptureNotSupported"
-        except VendorCaptureNotSupported:
+            assert False, f"{v} should raise VendorAdapterPending"
+        except VendorAdapterPending:
             pass
 
 
@@ -127,6 +127,6 @@ def test_worker_cmdb_miss():
     assert out["status"] == "error" and out["error"]["code"] == "cmdb_lookup_failed"
 
 
-def test_worker_vendor_unsupported():
-    out = _worker_process("srv-hpe-01")  # hpe capture -> VendorCaptureNotSupported
-    assert out["status"] == "error" and out["error"]["code"] == "vendor_unsupported"
+def test_worker_vendor_adapter_pending():
+    out = _worker_process("srv-hpe-01")  # hpe capture -> VendorAdapterPending
+    assert out["status"] == "error" and out["error"]["code"] == "vendor_adapter_pending"

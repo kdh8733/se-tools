@@ -2,7 +2,7 @@
 
 검증: 엔드포인트/응답 필드는 dell/iDRAC-Redfish-Scripting의 ExportServerScreenShotREDFISH.py 및
 iDRAC9 Redfish API Guide 확인. 응답 JSON의 ServerScreenShotFile에 base64 이미지.
-(덱 Path A. fw<7 RFB 풀스택은 이 어댑터 범위 밖 — 별도 구현 필요.)"""
+(덱 Path A. fw<7 RFB 풀스택은 추후 별도 어댑터로 추가 예정.)"""
 from __future__ import annotations
 
 import base64
